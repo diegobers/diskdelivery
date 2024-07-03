@@ -1,0 +1,1 @@
+ A Web Shop that list products and handle the shopping cart by user. The cart checkout process requires delivery and payment methods.
