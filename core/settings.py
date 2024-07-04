@@ -22,6 +22,8 @@ SECRET_KEY = env("ENV_SECRET_KEY")
 
 ALLOWED_HOSTS = env.list('HOSTS')
 
+CSRF_ALLOWED_ORIGINS = ['https://diskdelivery.up.railway.app']
+
 # App's
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -80,6 +82,12 @@ STORAGES = {
 DATABASES = { 
     'default': dj_database_url.config(default=os.environ["RAILWAY_URL_DB"]),
 }
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
+#    }
+#}
 
 # Validators
 AUTH_PASSWORD_VALIDATORS = [
