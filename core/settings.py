@@ -24,6 +24,8 @@ ALLOWED_HOSTS = env.list('HOSTS')
 
 CSRF_ALLOWED_ORIGINS = ['https://diskdelivery.up.railway.app']
 
+CSRF_TRUSTED_ORIGINS = ['https://diskdelivery.up.railway.app']
+
 # App's
 INSTALLED_APPS = [
     'django.contrib.admin',
