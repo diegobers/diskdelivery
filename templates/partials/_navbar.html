@@ -1,0 +1,48 @@
+{% load grid_tags static %}
+
+
+{% container %}
+<!-- NavBar -->
+  <nav class="navbar navbar-expand-lg bg-body-white sticky-top mx-4" aria-label="Template Navbar">
+    <a class="navbar-brand" href="{% url 'store:index' %}">
+      <img src="{% static 'img/logo.png' %}" alt="" style="width: 96px;" class="logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#MynavbarHeader" aria-controls="MynavbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="MynavbarHeader">
+      <ul class="navbar-nav ms-auto">
+        {% if request.user.is_superuser is not True %}
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'store:view_cart' %}">
+              <i class="fa-solid fa-cart-shopping"></i> Carrinho
+            </a>
+          </li>
+        {% endif %}        
+        {% if request.user.is_authenticated %}
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'store:order_list' %}">
+              <i class="fa-solid fa-address-card"></i> Painel
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'accounts:logout' %}">
+              <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </a>
+          </li>
+        {% else %}
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'accounts:signup' %}">
+              <i class="fa-solid fa-user-plus"></i> Cadastrar
+            </a>
+          </li>
+          <li class='nav-item'>
+            <a class='nav-link' href="{% url 'accounts:login' %}">
+              <i class="fa-solid fa-right-to-bracket"></i> Entrar
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+{% endcontainer %}
