@@ -9,32 +9,50 @@
 <!-- Product List Section -->
 <section id="products">
   {% container %}
-    {% if products %}
+    {% if list_aguas or list_gas %}
       {% row 'd-flex justify-content-center mx-4' %}
-        {% col 'col-sm-12 col-md-10 col-lg-8' %}
-          {% for product in products %}
-            <div class="card w-100 mx-auto shadow" href="#" style="width: 228rem;">
-              <img src="{{ product.photo_main.url }}" class="card-img-top" alt="...">
+        {% col 'col-12 col-sm-10 col-md-8' %}
+          {% for agua in list_aguas %}
+            <div class="card w-50 mx-auto shadow" href="#">
+              <img src="{% static 'img/agua.png' %}" class="card-img-top" height="320">
               <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text">{{ product.price }}</p>
+                <h5 class="card-title">{{ agua.description }}</h5>
+                <p class="card-text">{{ agua.price }}</p>
                 <div class="card-btn text-center">
-                  <form method="post" action="{% url 'store:add_cart' %}">
+                  <form method="" action="#">
                     {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <input type="hidden" name="agua_id" value="{{ agua.id }}">
+                    {% bootstrap_button button_class="btn btn-primary w-50" button_type="submit" content="Comprar" %}
+                  </form>
+                </div>
+              </div>
+            </div>  
+          {% endfor %}
+          <hr class="my-2">
+        {% endcol %}
+        {% col 'col-12 col-sm-10 col-md-8' %}
+          {% for gas in list_gas %}
+            <div class="card w-50 mx-auto shadow" href="#">
+              <img src="{% static 'img/gas.png' %}" class="card-img-top" height="320">
+              <div class="card-body">
+                <h5 class="card-title">{{ gas.description }}</h5>
+                <p class="card-text">{{ gas.price }}</p>
+                <div class="card-btn text-center">
+                  <form method="" action="#">
+                    {% csrf_token %}
+                    <input type="hidden" name="gas_id" value="{{ gas.id }}">
                     {% bootstrap_button button_class="btn btn-primary w-50" button_type="submit" content="Comprar" %}
                   </form>
                 </div>
               </div>
             </div>
-            <hr class="my-4">  
-          {% endfor %}
+          {% endfor %}          
         {% endcol %}
       {% endrow %}
     {% else %}
       {% row 'd-flex justify-content-center mt-5' %}
-        {% col 'col-md-8 my-2 text-center' %}
-          <img src="{% static 'icons/cart-x.svg' %}" width="64" height="64" alt="Sem Produtos">         
+        {% col 'col-md-8 my-2 text-center text-primary' %}
+          <img src="{% static 'icon/cart-x.svg' %}" width="64" alt="Sem Produtos">         
           <h2 class="mt-2"> Produtos :(</h2>
           <small>Ainda não foi cadastrado produtos nesta loja!!!</small>
         {% endcol %}

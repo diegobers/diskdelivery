@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Agua, Gas
+
+
+admin.site.register(Agua)
+admin.site.register(Gas)
