@@ -1,14 +1,12 @@
 @charset "UTF-8";
 
 :root {
-  --body-font-sans-serif: Geneva, Verdana, sans-serif;
-  --body-font-serif: Georgia, Garamond, serif;
-  --body-font-monospace: Consolas, "Courier New", monospace;
+  --body-font-sans-serif: "Open Sans", sans-serif;
   --body-font-size: 1rem;
   --body-font-weight: 400;
   --body-line-height: 1.5;
   --body-text-align: left;
-  --body-color: #0d6efd;
+  --body-color: var(--bs-primary);
   --body-bg: #fff;
   --heading-color: inherit;
   --border-width: 1px;
@@ -46,7 +44,7 @@ ul {
 body {
   margin: 0;
   padding-top: 65px;
-  font-family: var(--body-font-serif);
+  font-family: var(--body-font-sans-serif);
   font-size: var(--body-font-size);
   font-weight: var(--body-font-weight);
   line-height: var(--body-line-height);
