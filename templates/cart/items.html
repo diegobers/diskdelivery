@@ -1,0 +1,93 @@
+{% extends 'layouts/base.html' %} 
+
+{% load django_bootstrap5 grid_tags static %}
+
+{% block title %}Carrinho{% endblock %}
+
+
+{% block content %}
+<!-- Cart Section -->
+<section id="cart-list-items">
+  {% container %}
+    {% if cart_items %}
+      {% row 'mx-4' %}
+        {% col 'col-12 text-start' %}
+          <h3 class="mt-2">Meu Carrinho</h3>
+        {% endcol %}
+      {% endrow %}
+      {% row 'd-flex justify-content-center mx-4' %}
+        {% col 'col-12 col-md-7' %}
+          <!-- Cart Items List -->
+          <ul class="list-group list-group-flush shadow-lg">
+            {% for item in cart_items %}                
+            <li class="list-group-item border-1 rounded-0">
+              <div class="row align-items-center">
+                <div class="col-3">
+                  <!-- Img -->
+                  <img class="img-fluid" src="{% static 'img/gas.png' %}" width="128" height="128" alt="Carrinho Item Imagem">
+                </div>
+                <div class="col">
+                  <!-- Product Description -->
+                  <div class="d-flex mb-2 fw-bold">
+                    <h5 class="text-body">{{ item.product.name }}</h5>
+                    <span class="ms-auto">{{ item.product.price }}</span>
+                  </div>
+                  <!-- Form Footer -->
+                  <div class="d-flex align-items-end">
+                    <p class="text-muted mt-2 mb-0 pb-2">Qtd:{{ item.quantity }} </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          {% row 'text-end' %}
+            {% col 'col-12 my-2' %} 
+              <form action="{% url 'cart:clean_cart' %}" method="post">
+                {% csrf_token %}
+                {% bootstrap_button button_class="btn btn-link px-0 text-body" button_type="submit" content="Limpar Carrinho" %}
+              </form>
+            {% endcol %}
+          {% endrow %}
+        {% endcol %}
+        {% col 'col-12 col-md-5 col-lg-4 offset-lg-1' %}
+          <div class="card text-center border-1 rounded-0 shadow-lg mb-4">
+            <div class="card-body">
+              <h4 class="card-title fw-bold my-2">Resumo</h4>
+                <ul class="list-group list-group-flush">
+                  {% for item in cart_items %}                
+                    <li class="list-group-item d-flex">
+                      <span>{{ item.product.name }}</span>
+                      <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
+                    </li>
+                  {% endfor %}
+                  <li class="list-group-item d-flex fs-lg fw-bold">
+                    <span>Subtotal:</span>
+                    <span class="ms-auto fs-sm">R$ {{ cart_total|floatformat:2 }}
+                    </span>
+                  </li>
+                </ul>
+              <a class="btn btn-primary w-100 shadow-lg rounded-0 mt-4 mb-2" href="#">Finalizar Carrinho</a>
+              <a class="btn btn-link px-0 text-primary" href="{% url 'store:index' %}">Continuar Comprando</a>
+            </div>
+          </div>
+        {% endcol %}
+      {% endrow %}
+    {% else %}
+    <!-- Null Cart -->
+      {% row 'd-flex justify-content-center mt-5' %}
+        {% col 'col-md-8 my-2 text-center' %}
+          <img src="{% static 'icon/cart-x.svg' %}" width="64" height="64" alt="Carrinho Vazio">         
+          <h2 class="mt-2">Seu carrinho está vazio!</h2>
+          <small>Você ainda não possui itens no seu carrinho.</small>
+        {% endcol %}
+      {% endrow %}  
+      {% row 'd-flex justify-content-center mb-5' %}
+        {% col 'col-md-8 my-2 text-center' %}
+          <a class="btn btn-primary text-center w-25" href="{% url 'store:index' %}">Adicionar</a>
+        {% endcol %}
+      {% endrow %}
+    {% endif %}
+  {% endcontainer %}
+{% endblock content %}
+</section>
