@@ -15,7 +15,7 @@
       <ul class="navbar-nav ms-auto ">
         {% if request.user.is_superuser is not True %}
           <li class='nav-item'>
-            <a class='nav-link text-secondary' href="#">
+            <a class='nav-link text-secondary' href="{% url 'cart:view_cart' %}">
               <i class="fa-solid fa-cart-shopping"></i> Carrinho
             </a>
           </li>
