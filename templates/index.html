@@ -10,10 +10,10 @@
 <section id="products">
   {% container %}
     {% if product_list %}
-      {% row 'd-flex justify-content-center mx-4' %}
-        {% col 'col-12 col-sm-10 col-md-8' %}
-          {% for product in product_list %}
-            <div class="card w-50 mx-auto shadow mb-4" href="#">
+      {% row 'd-flex justify-content-center mt-4' %}
+        {% for product in product_list %}
+          {% col 'col-12 col-sm-10 col-md-8 col-lg-4' %}
+            <div class="card w-md-50 w-lg-75 mx-auto shadow mb-4" href="#">
               {% if product.category == 'A' %}
                 <img src="{% static 'img/agua.png' %}" class="card-img-top" height="320">
               {% endif %}
@@ -32,10 +32,9 @@
                 </div>
               </div>
             </div>
-          {% endfor %}
           <hr class="my-2">
-
-        {% endcol %}  
+          {% endcol %}  
+        {% endfor %}
       {% endrow %}
     {% else %}
       {% row 'd-flex justify-content-center mt-5' %}

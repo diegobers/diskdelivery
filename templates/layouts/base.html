@@ -18,8 +18,10 @@
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <title>{% block title %}{% endblock title %}</title>
   </head>
-  <body class="bg-body-tertiary">
-    {% include 'partials/_navbar.html' %}  
+  <body class="bg-body-terertiary">
+    <header class="bg-white border border-bottom border-primary-subtle shadow bg-body-primary">
+      {% include 'partials/_navbar.html' %}  
+    </header>
     
     {% block content %}
     {% endblock content %}

@@ -15,30 +15,30 @@
       <ul class="navbar-nav ms-auto ">
         {% if request.user.is_superuser is not True %}
           <li class='nav-item'>
-            <a class='nav-link text-secondary' href="{% url 'cart:view_cart' %}">
+            <a class='nav-link text-primary' href="{% url 'cart:view_cart' %}">
               <i class="fa-solid fa-cart-shopping"></i> Carrinho
             </a>
           </li>
         {% endif %}        
         {% if request.user.is_authenticated %}
           <li class='nav-item'>
-            <a class='nav-link text-secondary' href="#">
+            <a class='nav-link text-primary' href="#">
               <i class="fa-solid fa-address-card"></i> Painel
             </a>
           </li>
           <li class='nav-item'>
-            <a class='nav-link text-secondary' href="#">
+            <a class='nav-link text-primary' href="#">
               <i class="fa-solid fa-right-from-bracket"></i> Sair
             </a>
           </li>
         {% else %}
           <li class='nav-item'>
-            <a class='nav-link text-secondary' href="{% url 'store:admin_dashboard' %}">
+            <a class='nav-link text-primary' href="{% url 'store:admin_dashboard' %}">
               <i class="fa-solid fa-user-plus"></i> Cadastrar
             </a>
           </li>
           <li class='nav-item'>
-            <a class='nav-link text-secondary' href="#">
+            <a class='nav-link text-primary' href="#">
               <i class="fa-solid fa-right-to-bracket"></i> Entrar
             </a>
           </li>

@@ -1,7 +1,7 @@
 {% load grid_tags static %}
 
 <!-- Footer -->
-{% container 'd-flex justify-content-around border-top mt-5' %}
+{% container 'd-flex justify-content-around mt-2' %}
   {% row 'my-5 row-cols-2 row-cols-sm-2 row-cols-md-4' %}
     {% col %}
       <a href="{% url 'store:index' %}" class="mb-3 link-body-emphasis text-decoration-none">
@@ -30,10 +30,11 @@
   {% endrow %}
 {% endcontainer %}
 
-<div class="pt-2 pb-4 text-center text-secondary border-top border-secundary">  
-  <p>Desenvolvido por <a href="https://www.vivasoft.dev.br/" target="_blank">www.vivasoft.dev.br
-    <a href="https://www.instagram.com/vivasoft.dev/" target="_blank">
-      <img src="{% static 'icon/instagram.svg' %}" width="24" height="24">
-    </a>
+<div class="text-center text-secondary border-top border-primary-subtle my-2">  
+  <p class="mb-0 mt-4">Desenvolvido por, <a href="https://www.vivasoft.dev.br/" target="_blank">www.vivasoft.dev.br
   </p>
+    <small>Siga-nós<a href="https://www.instagram.com/vivasoft.dev/" target="_blank">
+      <img src="{% static 'icon/instagram.svg' %}" width="18" height="18" class="ms-1">
+    </a>
+  </small>
 </div>
