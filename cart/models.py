@@ -1,6 +1,6 @@
 from django.db import models
  
-from store.models import Gas
+from store.models import Product
 
 
 class Cart(models.Model):
@@ -13,8 +13,8 @@ class Cart(models.Model):
         return total
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Gas, related_name='prods', on_delete=models.DO_NOTHING)
-    product = models.ForeignKey(Gas, on_delete=models.DO_NOTHING)
+    cart = models.ForeignKey(Cart, related_name='prods', on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=0)
     
     @property
