@@ -9,45 +9,33 @@
 <!-- Product List Section -->
 <section id="products">
   {% container %}
-    {% if list_aguas or list_gas %}
+    {% if product_list %}
       {% row 'd-flex justify-content-center mx-4' %}
         {% col 'col-12 col-sm-10 col-md-8' %}
-          {% for agua in list_aguas %}
-            <div class="card w-50 mx-auto shadow" href="{% url 'cart:add_cart' %}">
-              <img src="{% static 'img/agua.png' %}" class="card-img-top" height="320">
+          {% for product in product_list %}
+            <div class="card w-50 mx-auto shadow mb-4" href="#">
+              {% if product.category == 'A' %}
+                <img src="{% static 'img/agua.png' %}" class="card-img-top" height="320">
+              {% endif %}
+              {% if product.category == 'G' %}
+                <img src="{% static 'img/gas.png' %}" class="card-img-top" height="320">
+              {% endif %}
               <div class="card-body">
-                <h5 class="card-title">{{ agua.description }}</h5>
-                <p class="card-text">{{ agua.price }}</p>
+                <h5 class="card-title">{{ product.description }}</h5>
+                <p class="card-text">{{ product.price }}</p>
                 <div class="card-btn text-center">
-                  <form method="POST" action="#">
+                  <form method="POST" action="{% url 'cart:add_product' %}">
                     {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ agua.id }}">
-                    {% bootstrap_button button_class="btn btn-primary w-50" button_type="submit" content="Comprar" %}
-                  </form>
-                </div>
-              </div>
-            </div>  
-          {% endfor %}
-          <hr class="my-2">
-        {% endcol %}
-        {% col 'col-12 col-sm-10 col-md-8' %}
-          {% for gas in list_gas %}
-            <div class="card w-50 mx-auto shadow" href="{% url 'cart:add_cart' %}">
-              <img src="{% static 'img/gas.png' %}" class="card-img-top" height="320">
-              <div class="card-body">
-                <h5 class="card-title">{{ gas.description }}</h5>
-                <p class="card-text">{{ gas.price }}</p>
-                <div class="card-btn text-center">
-                  <form method="" action="#">
-                    {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ gas.id }}">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
                     {% bootstrap_button button_class="btn btn-primary w-50" button_type="submit" content="Comprar" %}
                   </form>
                 </div>
               </div>
             </div>
-          {% endfor %}          
-        {% endcol %}
+          {% endfor %}
+          <hr class="my-2">
+
+        {% endcol %}  
       {% endrow %}
     {% else %}
       {% row 'd-flex justify-content-center mt-5' %}

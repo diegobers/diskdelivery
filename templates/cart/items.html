@@ -9,7 +9,7 @@
 <!-- Cart Section -->
 <section id="cart-list-items">
   {% container %}
-    {% if cart_items %}
+    {% if cart %}
       {% row 'mx-4' %}
         {% col 'col-12 text-start' %}
           <h3 class="mt-2">Meu Carrinho</h3>
@@ -24,7 +24,12 @@
               <div class="row align-items-center">
                 <div class="col-3">
                   <!-- Img -->
-                  <img class="img-fluid" src="{% static 'img/gas.png' %}" width="128" height="128" alt="Carrinho Item Imagem">
+                  {% if item.product.category == 'A' %}
+                    <img src="{% static 'img/agua.png' %}" class="card-img-top" height="320">
+                  {% endif %}
+                  {% if item.product.category == 'G' %}
+                    <img src="{% static 'img/gas.png' %}" class="card-img-top" height="320">
+                  {% endif %}
                 </div>
                 <div class="col">
                   <!-- Product Description -->
@@ -57,7 +62,7 @@
                 <ul class="list-group list-group-flush">
                   {% for item in cart_items %}                
                     <li class="list-group-item d-flex">
-                      <span>{{ item.product.name }}</span>
+                      <span>{{ item.product.description }}</span>
                       <span class="ms-auto fs-sm">R$ {{ item.get_cart_item_subtotal }}</span>
                     </li>
                   {% endfor %}
