@@ -7,17 +7,22 @@ from django.views.generic import (
     TemplateView, 
     View,
     DeleteView,
+    FormView,
+    DetailView,
 )
 
 from store.models import Product
-
+from checkout.models import Order, OrderItem
+from checkout.forms import OrderCheckoutForm
 from .models import Cart, CartItem
 
 
-class CartView(ListView):
-    model = Cart
+
+class CartView(ListView, FormView):
     template_name = 'cart/items.html'
     context_object_name = 'cart'
+    form_class = OrderCheckoutForm
+    success_url = reverse_lazy('store:index')
 
     def get_queryset(self):
         return Cart.objects.filter(session_key=self.request.session.session_key)
@@ -27,7 +32,32 @@ class CartView(ListView):
         cart = self.get_queryset().first() if self.get_queryset().exists() else None
         context['cart_items'] = CartItem.objects.filter(cart=cart)
         context['cart_total'] = cart.get_cart_total if cart else 0
+        context['form'] = self.get_form()
         return context
+    
+    def form_valid(self, form):
+        cart = self.get_queryset().first()
+
+        order = Order.objects.create(
+            shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
+            payment_method=form.cleaned_data['payment_method'],
+            observation=form.cleaned_data['observation'],
+            is_shipping=form.cleaned_data['is_shipping'],
+            total=sum(item.product.price * item.quantity for item in cart.prods.all())        
+        )   
+
+        for item in cart.prods.all():
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity
+            )
+
+        cart.prods.all().delete()
+        cart.delete()
+        return super().form_valid(form)
+
+
 
 
 class CleanCartView(DeleteView):
