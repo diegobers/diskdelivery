@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 
+from django.views.generic.list import ListView
 from django.views.generic import (
     CreateView, 
-    ListView, 
     TemplateView, 
     View,
     DeleteView,
@@ -12,31 +12,30 @@ from django.views.generic import (
 )
 
 from store.models import Product
-from checkout.models import Order, OrderItem
 from checkout.forms import OrderCheckoutForm
+from checkout.models import Order, OrderItem
 from .models import Cart, CartItem
 
 
-
-class CartView(ListView, FormView):
+class CartView(FormView, DetailView):
     template_name = 'cart/items.html'
     context_object_name = 'cart'
     form_class = OrderCheckoutForm
     success_url = reverse_lazy('store:index')
 
-    def get_queryset(self):
-        return Cart.objects.filter(session_key=self.request.session.session_key)
+    def get_object(self):
+        return Cart.objects.filter(session_key=self.request.session.session_key).first()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart = self.get_queryset().first() if self.get_queryset().exists() else None
+        cart = self.get_object() if self.get_object() else None
         context['cart_items'] = CartItem.objects.filter(cart=cart)
         context['cart_total'] = cart.get_cart_total if cart else 0
         context['form'] = self.get_form()
         return context
     
     def form_valid(self, form):
-        cart = self.get_queryset().first()
+        cart = self.get_object()
 
         order = Order.objects.create(
             shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
@@ -56,9 +55,6 @@ class CartView(ListView, FormView):
         cart.prods.all().delete()
         cart.delete()
         return super().form_valid(form)
-
-
-
 
 class CleanCartView(DeleteView):
     model = Cart
