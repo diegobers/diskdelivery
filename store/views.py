@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
-from .models import Agua, Gas
+from .models import Product
 
 
 class IndexView(TemplateView):
@@ -8,6 +8,5 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['list_aguas'] = Agua.objects.all()
-        context['list_gas'] = Gas.objects.all()
+        context['product_list'] = Product.objects.all()
         return context

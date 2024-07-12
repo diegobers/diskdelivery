@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import Agua, Gas
+from .models import Product
 
 
-admin.site.register(Agua)
-admin.site.register(Gas)
+admin.site.register(Product)
