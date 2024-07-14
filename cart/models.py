@@ -1,9 +1,16 @@
 from django.db import models
- 
+from django.conf import settings
+
 from store.models import Product
 
 
 class Cart(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.DO_NOTHING, 
+        null=True, 
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     session_key = models.CharField(max_length=40, null=True, blank=True)
 
