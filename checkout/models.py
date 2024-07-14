@@ -1,6 +1,8 @@
 from django.db import models
+from django.conf import settings
 
 from store.models import Product
+
 
 class Order(models.Model):
     ORDER_STATUS  = [
@@ -16,6 +18,7 @@ class Order(models.Model):
         ('deb', 'Débito'),
         ('pix','Pix'),
     ]
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     total = models.DecimalField(max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     observation = models.TextField(blank=True, null=True)
