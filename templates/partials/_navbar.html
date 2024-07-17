@@ -20,7 +20,7 @@
           </li>
         {% if request.user.is_authenticated %}
           <li class='nav-item'>
-            <a class='nav-link text-primary' href="#">
+            <a class='nav-link text-primary' href="{% url 'checkout:orders' %}">
               <i class="fa-solid fa-address-card"></i> {{request.user.email}}
             </a>
           </li>
