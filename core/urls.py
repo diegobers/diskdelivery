@@ -10,6 +10,7 @@ urlpatterns = [
     path('carrinho/', include('cart.urls')),
     path('perfil/', include('accounts.urls')),
     path('perfil/', include('allauth.urls')),
+    path('pedidos/', include('checkout.urls')),
 ]
 
 if settings.DEBUG:
