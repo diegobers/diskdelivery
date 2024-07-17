@@ -17,7 +17,7 @@ from checkout.models import Order, OrderItem
 from .models import Cart, CartItem
 
 
-class CartView(FormView, DetailView):
+class CartView(DetailView, FormView):
     template_name = 'cart/items.html'
     context_object_name = 'cart'
     form_class = OrderCheckoutForm
@@ -29,12 +29,11 @@ class CartView(FormView, DetailView):
         else:
             cart = Cart.objects.filter(session_key=self.request.session.session_key).last()
         
-        self.object = cart
         return cart
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart = self.get_object()
+        cart = self.get_object() if self.get_object() else None
         context['cart_items'] = CartItem.objects.filter(cart=cart) if cart else []
         context['cart_total'] = cart.get_cart_total if cart else 0
         context['form'] = self.get_form()
