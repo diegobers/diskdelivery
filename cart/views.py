@@ -17,63 +17,37 @@ from checkout.models import Order, OrderItem
 from .models import Cart, CartItem
 
 
-class CartView(DetailView, FormView):
+class CartView(DetailView):
     template_name = 'cart/items.html'
-    context_object_name = 'cart'
+    model = Cart
     form_class = OrderCheckoutForm
-    success_url = reverse_lazy('store:order-confir')
+    success_url = reverse_lazy('checkout:order-confir')
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         if self.request.user.is_authenticated:
-            cart = Cart.objects.filter(user=self.request.user).last()
-        else:
-            cart = Cart.objects.filter(session_key=self.request.session.session_key).last()
-        
-        return cart
-
+            return Cart.objects.filter(user=self.request.user).last()
+        elif self.request.user.is_anonymous:
+            return Cart.objects.filter(session_key=self.request.session.session_key).last() 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = self.get_object() if self.get_object() else None
-        context['cart_items'] = CartItem.objects.filter(cart=cart) if cart else []
-        context['cart_total'] = cart.get_cart_total if cart else 0
+        context['items'] = cart.prods.all() if cart else None
         context['form'] = self.get_form()
         return context
-
-    def form_valid(self, form):
-        cart = self.get_object()
-        if not cart:
-            return self.form_invalid(form)
-        
-        order = Order.objects.create(
-            user=self.request.user,
-            shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
-            payment_method=form.cleaned_data['payment_method'],
-            observation=form.cleaned_data['observation'],
-            is_shipping=form.cleaned_data['is_shipping'],
-            total=cart.get_cart_total        )
-        
-        for item in cart.prods.all():
-            OrderItem.objects.create(
-                order=order,
-                product=item.product,
-                quantity=item.quantity
-            )
-        
-        cart.prods.all().delete()
-        cart.delete()
-        
-        return super().form_valid(form)
 
 class CartView2(FormView, DetailView):
     template_name = 'cart/items.html'
     context_object_name = 'cart'
     form_class = OrderCheckoutForm
     success_url = reverse_lazy('store:order-confir')
+    
     def get_object(self):
         if self.request.user.is_authenticated:
             return Cart.objects.get(user=self.request.user)
         elif self.request.user.is_anonymous:
             return Cart.objects.get(session_key=self.request.session.session_key)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = self.get_object().last() if self.get_object() else None
@@ -81,6 +55,7 @@ class CartView2(FormView, DetailView):
         context['cart_total'] = cart.get_cart_total if cart else 0
         context['form'] = self.get_form()
         return context
+    
     def form_valid(self, form):
         cart = self.get_object()
         order = Order.objects.create(
@@ -118,10 +93,15 @@ class AddProductCartView(View):
         id = request.POST.get('product_id')
         product = Product.objects.get(id=id)
 
-        if not request.session.session_key:
-            request.session.create()
-        cart, created = Cart.objects.get_or_create(session_key=request.session.session_key)
-        
+        if request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=request.user)
+        else:
+            session_key = request.session.session_key
+            if not session_key:
+                request.session.create()
+                session_key = request.session.session_key
+            cart, created = Cart.objects.get_or_create(session_key=session_key)
+
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         cart_item.quantity += 1
         cart_item.save()
