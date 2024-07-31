@@ -3,10 +3,11 @@ from django.shortcuts import render
 
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 
 from .models import Order, OrderItem
 
-class OrderConfirmationView(LoginRequiredMixin, TemplateView):
+class OrderConfirmationView(LoginRequiredMixin, CreateView):
     template_name = 'checkout/order_confirmation.html'
     context_object_name = 'order'
 
