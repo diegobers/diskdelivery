@@ -17,9 +17,8 @@ from checkout.models import Order, OrderItem
 from .models import Cart, CartItem
 
 
-class CartView(DetailView):
+class CartView(DetailView, FormView):
     template_name = 'cart/items.html'
-    model = Cart
     form_class = OrderCheckoutForm
     success_url = reverse_lazy('checkout:order-confir')
 
@@ -35,44 +34,32 @@ class CartView(DetailView):
         context['items'] = cart.prods.all() if cart else None
         context['form'] = self.get_form()
         return context
-
-class CartView2(FormView, DetailView):
-    template_name = 'cart/items.html'
-    context_object_name = 'cart'
-    form_class = OrderCheckoutForm
-    success_url = reverse_lazy('store:order-confir')
-    
-    def get_object(self):
-        if self.request.user.is_authenticated:
-            return Cart.objects.get(user=self.request.user)
-        elif self.request.user.is_anonymous:
-            return Cart.objects.get(session_key=self.request.session.session_key)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        cart = self.get_object().last() if self.get_object() else None
-        context['cart_items'] = CartItem.objects.filter(cart=cart)
-        context['cart_total'] = cart.get_cart_total if cart else 0
-        context['form'] = self.get_form()
-        return context
     
     def form_valid(self, form):
         cart = self.get_object()
+        if not cart:
+            return self.form_invalid(form)
+
         order = Order.objects.create(
+            user=self.request.user,
             shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
             payment_method=form.cleaned_data['payment_method'],
             observation=form.cleaned_data['observation'],
             is_shipping=form.cleaned_data['is_shipping'],
-            total=sum(item.product.price * item.quantity for item in cart.prods.all())        
-        )   
-        for item in cart.prods.all():
+        )  
+
+        # Transfer CartItems to OrderItems
+        for cart_item in cart.prods.all():
             OrderItem.objects.create(
                 order=order,
-                product=item.product,
-                quantity=item.quantity
+                product=cart_item.product,
+                quantity=cart_item.quantity,
             )
+
+        # Clear the cart after order is created
         cart.prods.all().delete()
         cart.delete()
+
         return super().form_valid(form)
 
 class CleanCartView(DeleteView):
