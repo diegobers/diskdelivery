@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
-from allauth.account.views import LoginView
-from allauth.account.views import SignupView
+from allauth.account.views import LoginView, SignupView
 
 from cart.models import Cart
 
-from .forms import CustomSignupForm
 
 class LoginOnGetView(LoginView):
     template_name = 'accounts/login.html'
@@ -27,14 +25,12 @@ class LoginOnGetView(LoginView):
             cart.user_id = self.request.user.id
             cart.session_key = None
             cart.save()
-            del self.request.session['last_session_key']
-            #messages.success(request, ("Update Cart Items..."))
         return response
+
 
 class CustomSignupView(SignupView):
     template_name = 'accounts/signup.html'
-    form_class = CustomSignupForm
-    success_url = reverse_lazy('checkout:orders')
+    success_url = reverse_lazy('store:index')
     
     def get(self, request, *args, **kwargs):
         request.session['last_session_key'] = request.session.session_key

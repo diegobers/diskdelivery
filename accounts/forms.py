@@ -2,10 +2,10 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 
-from allauth.account.forms import LoginForm, SignupForm
+from allauth.account.forms import LoginForm, SignupForm 
 
 
-class CustomAllAuthLoginForm(LoginForm):
+class CustomLoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -18,6 +18,11 @@ class CustomAllAuthLoginForm(LoginForm):
         self.fields['password'].label = _('Senhaa')
 
         self.fields['password'].help_text = mark_safe('<a href=recuperar-senha/>Recuperar Senha?</a>')
+    
+    def save(self, request):
+        user = super().save(request)
+        return user
+
 
 class CustomSignupForm(SignupForm):
     def save(self, request):
