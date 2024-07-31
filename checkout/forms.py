@@ -32,6 +32,8 @@ class OrderCheckoutForm(forms.ModelForm):
         cleaned_data = super().clean()
         is_shipping = cleaned_data.get('is_shipping') == 'True'
         shipping_address = cleaned_data.get('shipping_address')
+        payment_method = cleaned_data.get('payment_method')
+        observation = cleaned_data.get('observation')
 
         if is_shipping:
             self.fields['shipping_address'].required = True
