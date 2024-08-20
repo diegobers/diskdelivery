@@ -11,7 +11,11 @@
 <!-- Admin Section -->
 <section id="admin-dashboard">
   {% container %}
-    <!-- Main -->
+  <!-- Add Product --> 
+  <div class="text-center">            
+    <a href="{% url 'store:add_product' %}" class="btn btn-dark w-100">Adicionar Produto</a>
+  </div>
+  <!-- Main -->
     {% row 'mx-md-0 mx-lg-4 px-md-0 px-lg-2 mt-4' %}
       <h2>Lista de Pedidos</h2>
       <div class="table-responsive p-4">
@@ -41,6 +45,10 @@
         </table>
       </div>
     {% endrow %}
+
+
+
+
   {% endcontainer %}
 </section>
 {% else %}

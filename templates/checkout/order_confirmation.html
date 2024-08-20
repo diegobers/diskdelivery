@@ -16,9 +16,86 @@
 
         <h2 class="mt-4 mb-2">Pedido Confirmado!!!</h2>
         <p>Obrigado! Seu pedido está sendo preparado.</p>
-        <a class="btn btn-dark w-50 my-2" href="{% url 'store:index' %}">Pedido</a>
+        
+        <div class="card mb-4 shadow">
+          <div class="card-body pb-0">
+            <div class="card">
+              <div class="card-body p-4 pb-2">
+                {% row %}
+                  {% col 'col-6 col-lg-3' %}
+                    <h6 class="text-muted">Código</h6>
+                    <p class="mb-lg-0 fs-sm fw-bold">#{{ order.id }}</p>
+                  {% endcol %}
 
-        <a class="btn btn-dark w-50 my-2" href="#">Meus Pedidos</a>
+                  {% col 'col-6 col-lg-3' %}
+                    <h6 class="text-muted">Data</h6>
+                    <p class="mb-lg-0 fs-sm fw-bold">{{ order.created_at }}</p>
+                  {% endcol %}
+                  
+                  {% col 'col-6 col-lg-3' %}
+                    <h6 class="text-muted">Status</h6>
+                    <p class="mb-lg-0 fs-sm fw-bold">{{ order.status }}</p>
+                  {% endcol %}
+                  
+                  {% col 'col-6 col-lg-3' %}
+                    <h6 class="text-muted">Valor Total:</h6>
+                    <p class="mb-lg-0 fs-sm fw-bold">{{ order.total }}</p>
+                  {% endcol %}
+                {% endrow %}
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            {% row 'd-flex align-items-center' %}
+              <!-- Order Items -->
+              {% col 'col-12 col-lg-6' %}
+                
+                <ol>
+                  {% for item in order.items.all %}
+                    
+                      {% row %}
+                        
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                  <img class="img-fluid" src="{{ item.pizza.photo_main.url }}" width="32" height="32" alt="Carrinho Item Imagem">
+                              
+
+                              </td>
+
+                              <td>
+                                  <li>
+                                      
+                                    {{ item.pizza.name }}
+                                    
+                                  </li>
+
+                              </td>
+
+
+                            </tr>
+                          </tbody>
+                        </table>
+                            
+
+
+                      {% endrow %}
+                    
+                  {% endfor %}
+                </ol>
+              {% endcol %}
+              <!-- Buttom Detail -->
+              {% col 'col-12 col-lg-6' %}
+                {% row 'justify-content-center m-2' %}
+                  <a class="btn btn-dark w-50" href="#}">Detalhes</a>
+                {% endrow %}
+              {% endcol %}
+            {% endrow %}
+          </div>
+        </div>
+        
+        <a class="btn btn-outline-primary w-50 my-2" href="#">Meus Pedidos</a>
       {% endcol %}
     {% endrow %}
   {% endcontainer %}

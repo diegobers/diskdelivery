@@ -19,7 +19,7 @@ class Order(models.Model):
         ('pix','Pix'),
     ]
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
-    total = models.DecimalField(max_digits=5, decimal_places=2)
+    total = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     observation = models.TextField(blank=True, null=True)
     is_shipping = models.BooleanField(default=False)

@@ -21,37 +21,50 @@ class OrderConfirmationView(LoginRequiredMixin, CreateView):
     def get_cart(self):
         return Cart.objects.filter(user=self.request.user).last()
 
-    def form_valid(self, form):
+    def get_object(self):
+        """Retrieve the last order created by the user or create a new one."""
+        # Try to get the latest order for the user
+        order = Order.objects.filter(user=self.request.user).last()
+        if order:
+            return order
+        
         cart = self.get_cart()
         if not cart:
-            # Redirect to cart if no items to order
-            return redirect('cart:cart-items')
+            return None
 
-        # Create the order object
-        order = form.save(commit=False)
-        order.user = self.request.user
-        order.total = sum(item.product.price * item.quantity for item in cart.prods.all())
-        order.save()
+        order = Order.objects.create(
+            user=self.request.user,
+            total=sum(item.product.price * item.quantity for item in cart.prods.all()),
+            shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
+            payment_method=form.cleaned_data['payment_method'],
+            observation=form.cleaned_data['observation'],
+            is_shipping=form.cleaned_data['is_shipping'],
+        )  
 
-        # Transfer CartItems to OrderItems
         for cart_item in cart.prods.all():
             OrderItem.objects.create(
                 order=order,
                 product=cart_item.product,
                 quantity=cart_item.quantity,
             )
-
-        # Clear the cart after the order is created
         cart.prods.all().delete()
         cart.delete()
         
-        self.object = order  # Set self.object to the created order
+        return order
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        if not self.object:
+            return redirect('cart:view_cart')
 
         return super().form_valid(form)
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order'] = self.object
+        order = self.get_object()
+        context['order'] = order
+        context['items'] = order.items.all() if order else None
         return context
 
 
