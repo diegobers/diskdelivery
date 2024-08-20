@@ -22,8 +22,6 @@ class OrderConfirmationView(LoginRequiredMixin, CreateView):
         return Cart.objects.filter(user=self.request.user).last()
 
     def get_object(self):
-        """Retrieve the last order created by the user or create a new one."""
-        # Try to get the latest order for the user
         order = Order.objects.filter(user=self.request.user).last()
         if order:
             return order
@@ -66,7 +64,6 @@ class OrderConfirmationView(LoginRequiredMixin, CreateView):
         context['order'] = order
         context['items'] = order.items.all() if order else None
         return context
-
 
 
 class OrdersView(LoginRequiredMixin, ListView):

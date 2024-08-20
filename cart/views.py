@@ -34,33 +34,7 @@ class CartView(DetailView, FormView):
         context['items'] = cart.prods.all() if cart else None
         context['form'] = self.get_form()
         return context
-    
-    def form_valid(self, form):
-        cart = self.get_object()
-        if not cart:
-            return self.form_invalid(form)
 
-        order = Order.objects.create(
-            user=self.request.user,
-            shipping_address=form.cleaned_data['shipping_address'] if form.cleaned_data['is_shipping'] == 'True' else None,
-            payment_method=form.cleaned_data['payment_method'],
-            observation=form.cleaned_data['observation'],
-            is_shipping=form.cleaned_data['is_shipping'],
-        )  
-
-        # Transfer CartItems to OrderItems
-        for cart_item in cart.prods.all():
-            OrderItem.objects.create(
-                order=order,
-                product=cart_item.product,
-                quantity=cart_item.quantity,
-            )
-
-        # Clear the cart after order is created
-        cart.prods.all().delete()
-        cart.delete()
-
-        return super().form_valid(form)
 
 class CleanCartView(DeleteView):
     model = Cart
