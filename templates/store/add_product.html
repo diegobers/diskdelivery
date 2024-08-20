@@ -1,0 +1,29 @@
+{% extends 'layouts/base.html' %} 
+
+{% load static %}
+{% load django_bootstrap5 grid_tags %}
+
+{% block content %}
+<!-- Add Product Section -->
+<section id="user-dashboard" class="py-5">
+  
+
+  {% container %}
+
+    {% row 'justify-content-center' %}
+      {% col 'col-lg-6' %}
+        <h1>Adicionar Pizza</h1>
+
+        <form method="post" action="{% url 'store:add_product' %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="text-center">
+            {% bootstrap_button button_class="btn btn-dark w-25" button_type="submit" content="Adicionar" %}   
+          </div>
+        </form>
+      {% endcol %}
+
+    {% endrow %}
+  {% endcontainer %}
+</section>
+{% endblock content %}
