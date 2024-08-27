@@ -9,48 +9,53 @@
 <!-- Orders View -->
 {% if request.user.is_superuser %}
 <!-- Admin Section -->
-<section id="admin-dashboard">
-  {% container %}
-  <!-- Add Product --> 
-  <div class="text-center">            
-    <a href="{% url 'store:add_product' %}" class="btn btn-dark w-100">Adicionar Produto</a>
-  </div>
-  <!-- Main -->
-    {% row 'mx-md-0 mx-lg-4 px-md-0 px-lg-2 mt-4' %}
-      <h2>Lista de Pedidos</h2>
-      <div class="table-responsive p-4">
-        <table class="table table-hover shadow rounded">
-          <thead class="table-light">
-              <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Observation</th>
-                  <th scope="col">Shipping</th>
-                  <th scope="col">Payment Method</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Total</th>
-              </tr>
-          </thead>
-          <tbody class="table-group-divider">
-              {% for order in orders %}
-              <tr scope="row">
-                  <td>{{ order.id }}</td>
-                  <td>{{ order.observation }}</td>
-                  <td>{{ order.is_shipping|yesno:"Sim,Não" }}</td>
-                  <td>{{ order.get_payment_method_display }}</td>
-                  <td>{{ order.get_status_display }}</td>
-                  <td>R$ {{ order.total }}</td>
-              </tr>
-              {% endfor %}
-          </tbody>
-        </table>
+<div class="d-flex align-items-stretch">
+  {% container 'px-lg-4 px-xl-5' %}
+  
+    <section class="mb-3 mb-lg-5" id="admin-dashboard">
+      
+      <!-- Add Product --> 
+      <div class="text-center">            
+        <a href="{% url 'store:add_product' %}" class="btn btn-dark w-100">Adicionar Produto</a>
       </div>
-    {% endrow %}
+      <!-- Main -->
+        {% row 'mx-md-0 mx-lg-4 px-md-0 px-lg-2 mt-4' %}
+          <h2>Lucas</h2>
+          <div class="table-responsive p-4">
+            <table class="table table-hover shadow rounded">
+              <thead class="table-light">
+                  <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Observation</th>
+                      <th scope="col">Shipping</th>
+                      <th scope="col">Payment Method</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Total</th>
+                  </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                  {% for order in orders %}
+                  <tr scope="row">
+                    <td><a href="{% url 'checkout:order_view' order.id %}">{{ order.id }}</a></td>
+                    <td>{{ order.observation }}</td>
+                    <td>{{ order.is_shipping|yesno:"Sim,Não" }}</td>
+                    <td>{{ order.get_payment_method_display }}</td>
+                    <td>{{ order.get_status_display }}</td>
+                    <td>R$ {{ order.total }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endrow %}
 
 
-
-
+    </section>
   {% endcontainer %}
-</section>
+</div>
+
+
+
 {% else %}
 <!-- User Section -->
 <section id="user-dashboard" class="py-5">

@@ -6,6 +6,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
+from django.views.generic.detail import DetailView
 
 from cart.models import Cart, CartItem
 
@@ -84,3 +85,8 @@ class OrdersView(LoginRequiredMixin, ListView):
             order.order_items = OrderItem.objects.filter(order=order)
 
         return context
+
+class OrderDetail(DetailView):
+    model = Order
+    template_name = 'checkout/order.html'
+    context_object_name = 'order'

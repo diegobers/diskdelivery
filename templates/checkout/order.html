@@ -1,0 +1,65 @@
+{% extends 'layouts/base.html' %}
+
+{% load grid_tags static %}
+
+{% block title %}Detalhes do Pedido{% endblock %}
+
+
+{% block content %}
+<!-- Order Section -->
+  
+  <div class="card mb-4 shadow">
+    <div class="card-body pb-0">
+      <div class="card">
+        <div class="card-body p-4 pb-2">
+          {% row %}
+            {% col 'col-6 col-lg-3' %}
+              <h6 class="text-muted">Código</h6>
+              <p class="mb-lg-0 fs-sm fw-bold">#{{ order.id }}</p>
+            {% endcol %}
+
+            {% col 'col-6 col-lg-3' %}
+              <h6 class="text-muted">Data</h6>
+              <p class="mb-lg-0 fs-sm fw-bold">{{ order.created_at }}</p>
+            {% endcol %}
+            
+            {% col 'col-6 col-lg-3' %}
+              <h6 class="text-muted">Status</h6>
+              <p class="mb-lg-0 fs-sm fw-bold">{{ order.status }}</p>
+            {% endcol %}
+            
+            {% col 'col-6 col-lg-3' %}
+              <h6 class="text-muted">Valor Total:</h6>
+              <p class="mb-lg-0 fs-sm fw-bold">{{ order.total }}</p>
+            {% endcol %}
+          {% endrow %}
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      {% row 'd-flex align-items-center' %}
+        <!-- Order Items -->
+        {% col 'col-12 col-lg-6' %}
+          {% row 'd-flex justify-content-evenly m-4' %}
+            <h3>Items:</h3>
+            {% for item in order.order_items %}
+              <!-- Img -->
+              {% col 'col-4' %}
+                <img class="img-fluid" src="{{ item.product.photo_main.url }}" width="128" height="128" alt="Carrinho Item Imagem">
+              {% endcol %}
+            {% endfor %}
+          {% endrow %}
+        {% endcol %}
+        <!-- Buttom Detail -->
+        {% col 'col-12 col-lg-6' %}
+          {% row 'justify-content-center m-2' %}
+            <a class="btn btn-dark w-25" href="#">Preparando</a>
+            <a class="btn btn-dark w-25" href="#">Entregue</a>
+            <a class="btn btn-dark w-25" href="#">Cancelado</a>
+          {% endrow %}
+        {% endcol %}
+      {% endrow %}
+    </div>
+  </div>
+
+{% endblock content %}
